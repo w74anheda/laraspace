@@ -14,7 +14,7 @@ services:
 
 ### Workspace Utilities ##################################
     workspace:
-      restart: unless-stopped
+      restart: on-failure
       build:
         context: ./workspace
         args:
@@ -160,7 +160,7 @@ services:
 
 ### PHP-FPM ##############################################
     php-fpm:
-      restart: unless-stopped
+      restart: on-failure
       build:
         context: ./php-fpm
         args:
@@ -273,7 +273,7 @@ services:
 
 ## PHP Worker ############################################
     php-worker:
-      restart: unless-stopped
+      restart: on-failure
       build:
         context: ./php-worker
         args:
@@ -329,7 +329,7 @@ services:
 
 ### NGINX Server #########################################
     nginx:
-      restart: unless-stopped
+      restart: on-failure
       build:
         context: ./nginx
         args:
@@ -353,6 +353,7 @@ services:
          backend:
             aliases:
               - search.test
+              - idp.test
       extra_hosts:
         - "host.docker.internal:host-gateway"  
 
@@ -363,7 +364,7 @@ services:
         context: ./mysql
         args:
           - MYSQL_VERSION=${MYSQL_VERSION}
-      restart: unless-stopped
+      restart: on-failure
       environment:
         - MYSQL_DATABASE=${MYSQL_DATABASE}
         - MYSQL_USER=${MYSQL_USER}
@@ -381,7 +382,7 @@ services:
   ### Redis ################################################
     redis:
       build: ./redis
-      restart: unless-stopped
+      restart: on-failure
       volumes:
         - ${DATA_PATH_HOST}/redis:/data
       command: --requirepass ${REDIS_PASSWORD}
@@ -390,7 +391,7 @@ services:
 
 ### ElasticSearch ########################################
     elasticsearch:
-      restart: unless-stopped
+      restart: on-failure
       build:
         context: ./elasticsearch
         args:
@@ -424,7 +425,7 @@ services:
 
 ### Kibana ##############################################
     kibana:
-      restart: unless-stopped
+      restart: on-failure
       build:
         context: ./kibana
         args:
